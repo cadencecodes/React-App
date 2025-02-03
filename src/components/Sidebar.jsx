@@ -1,52 +1,55 @@
-import { useState, useCallback } from "react"
-/**
- * Renders an array of strings passed in that can be filtered and added to as an
- * unordered list.
- * @returns Component
- */
-export default function Sidebar() {
-  let [newMenuItem, setNewMenuItem] = useState("")
-  // TODO: 2 Using a state hook, maintain the current menu items as an array state.
-  // let [menuItems, setMenuItems] = useState(initialMenuItems)
-  let [filter, setFilter] = useState("")
-  // Adds a single string passed in as parameter to the state element
-  // "menuItems" that holds the set of current menu items.
+import { useState, useCallback } from "react";
+
+export default function Sidebar({ initialMenuItems }) {  // Accept initialMenuItems as a prop
+  let [newMenuItem, setNewMenuItem] = useState("");
+  let [filter, setFilter] = useState("");
+  
+  // TODO 2: Maintain menu items as state
+  let [menuItems, setMenuItems] = useState(initialMenuItems); 
+
+  // TODO 3: Implement addMenuItem function
   let addMenuItem = useCallback(() => {
-    console.log("Added menu item")
-    //   // TODO: 3. Add a new menu item to the correct variable associated with this class.
-    //   // This involves adding a parameter and changing a class instance variable (props).
-    //   setMenuItems([item, ...menuItems])
-  }, [])
+    if (newMenuItem.trim() !== "") {
+      setMenuItems([...menuItems, newMenuItem]);  // Add new item to state
+      setNewMenuItem(""); // Clear input field after adding
+    }
+  }, [newMenuItem, menuItems]);
 
-  // TODO: 4. Display ONLY the menu items that contain the filter element value
-  // "term" in them. Each menu item should be an unordered list item wrapped in an unordered list (ul) element.
+  // TODO 4: Filter menu items dynamically
+  let filteredItems = menuItems.filter(item => 
+    new RegExp(filter, "i").test(item)  // Case-insensitive filtering
+  );
 
-  // TODO: 1 Render inside the outer div an unordered list of the menu items, with each string in the array
-  // its own item.
   return (
     <div>
-      <input
-        type="text"
-        id="newMenuItemValue"
-        value={newMenuItem}
-        onChange={(event) => setNewMenuItem(event.target.value)}
-      ></input>
-      <br />
-      <button
-        onClick={() => {
-          /* TODO: 3 */
-        }}
-      >
-        Add Item
-      </button>
-      <br />
+      {/* Filter Input */}
       <input
         id="filter"
         type="text"
         value={filter}
         onChange={(event) => setFilter(event.target.value)}
         placeholder="Filter by..."
-      ></input>
+      />
+      <br />
+
+      {/* Render the filtered menu items */}
+      <ul>
+        {filteredItems.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+
+      {/* Add New Item Input */}
+      <input
+        type="text"
+        id="newMenuItemValue"
+        value={newMenuItem}
+        onChange={(event) => setNewMenuItem(event.target.value)}
+      />
+      <br />
+
+      {/* Add Button */}
+      <button onClick={addMenuItem}>Add Item</button>
     </div>
-  )
+  );
 }
