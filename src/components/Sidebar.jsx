@@ -1,28 +1,27 @@
 import { useState, useCallback } from "react";
 
-export default function Sidebar({ initialMenuItems }) {  // Accept initialMenuItems as a prop
-  let [newMenuItem, setNewMenuItem] = useState("");
-  let [filter, setFilter] = useState("");
-  
-  // TODO 2: Maintain menu items as state
+export default function Sidebar({ initialMenuItems }) {  
+  // TODO 2: Maintain menu items as state, initialized from the prop "initialMenuItems"
   let [menuItems, setMenuItems] = useState(initialMenuItems); 
+  let [newMenuItem, setNewMenuItem] = useState(""); 
+  let [filter, setFilter] = useState(""); 
 
-  // TODO 3: Implement addMenuItem function
+  // TODO 3: Implement addMenuItem function to add a new item from the input box
   let addMenuItem = useCallback(() => {
     if (newMenuItem.trim() !== "") {
-      setMenuItems([...menuItems, newMenuItem]);  // Add new item to state
-      setNewMenuItem(""); // Clear input field after adding
+      setMenuItems(prevItems => [...prevItems, newMenuItem]); 
+      setNewMenuItem(""); 
     }
-  }, [newMenuItem, menuItems]);
+  }, [newMenuItem]);
 
-  // TODO 4: Filter menu items dynamically
+  // TODO 4: Filter menu items dynamically using case-insensitive matching
   let filteredItems = menuItems.filter(item => 
-    new RegExp(filter, "i").test(item)  // Case-insensitive filtering
+    new RegExp(filter, "i").test(item)  
   );
 
   return (
     <div>
-      {/* Filter Input */}
+      {/* TODO 4: Input field to filter menu items */}
       <input
         id="filter"
         type="text"
@@ -32,14 +31,14 @@ export default function Sidebar({ initialMenuItems }) {  // Accept initialMenuIt
       />
       <br />
 
-      {/* Render the filtered menu items */}
+      {/* TODO 1: Render menu items as an unordered list */}
       <ul>
         {filteredItems.map((item, index) => (
           <li key={index}>{item}</li>
         ))}
       </ul>
 
-      {/* Add New Item Input */}
+      {/* TODO 3: Input field for adding a new menu item */}
       <input
         type="text"
         id="newMenuItemValue"
@@ -48,7 +47,7 @@ export default function Sidebar({ initialMenuItems }) {  // Accept initialMenuIt
       />
       <br />
 
-      {/* Add Button */}
+      {/* TODO 3: Button to add new menu item */}
       <button onClick={addMenuItem}>Add Item</button>
     </div>
   );
